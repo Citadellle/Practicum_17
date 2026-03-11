@@ -39,8 +39,8 @@ def sort_words_by_frequency(frequency: dict) -> list:
     Returns:
         list: List of words sorted by frequency in descending order
     '''
-    sorted_words = sorted(frequency.keys(), 
-                          key= lambda w: frequency[w], 
+    sorted_words = sorted(frequency, 
+                          key= lambda word: frequency[word], 
                           reverse= True)
     
     return sorted_words
@@ -68,4 +68,5 @@ def main() -> None:
 
 
 if __name__ == '__main__':
+
     main()
