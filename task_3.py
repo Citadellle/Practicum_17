@@ -10,7 +10,7 @@ def get_dict_size() -> int:
     return n
 
 
-def create_antonym_dict(n: int) -> dict:
+def antonym_dict(n: int) -> dict:
     '''
     The function creates a dictionary of antonyms from user input.
     Each pair (word1 word2) adds pairs keys and values:
@@ -27,14 +27,16 @@ def create_antonym_dict(n: int) -> dict:
     print('Введите пары антонимов (через пробел):')
 
     for _ in range(n):
-        word1, word2 = input().split()
+        line = input().split()
+        word1, word2 = line[0], line[1]
+
         antonyms[word1] = word2
         antonyms[word2] = word1
     
     return antonyms
 
 
-def get_target_word() -> str:
+def get_user_word() -> str:
     '''
     The function reads the word for which you need to find the antonym.
 
@@ -67,11 +69,11 @@ def find_antonym(word: str, antonyms: dict) -> str:
 def main() -> None:
     n = get_dict_size()
 
-    antonyms = create_antonym_dict(n)
+    antonyms = antonym_dict(n)
 
-    target_word = get_target_word()
+    user_word = get_user_word()
 
-    result = find_antonym(target_word, antonyms)
+    result = find_antonym(user_word, antonyms)
     
     print(result)
 
