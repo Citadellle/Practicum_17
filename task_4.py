@@ -38,12 +38,12 @@ def create_shape_dict(n: int) -> dict:
     return shape_dict
 
 
-def get_target_object() -> str:
+def get_user_object() -> str:
     '''
     The function reads the object for which the shape needs to be found.
 
     Returns:
-        str: The target object
+        str: The user object
     '''
     obj = input('Введите предмет для поиска формы: ')
     
@@ -65,7 +65,7 @@ def find_shape(obj: str, shape_dict: dict) -> str:
     if obj in shape_dict:
         return shape_dict[obj]
     
-    return obj
+    return 'Форма предмета неизвестна'
 
 
 def main() -> None:
@@ -73,9 +73,9 @@ def main() -> None:
 
     shape_dict = create_shape_dict(n)
 
-    target_object = get_target_object()
+    user_object = get_user_object()
 
-    result = find_shape(target_object, shape_dict)
+    result = find_shape(user_object, shape_dict)
     
     print(result)
 
