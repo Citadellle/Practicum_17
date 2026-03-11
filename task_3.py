@@ -41,7 +41,7 @@ def get_user_word() -> str:
     The function reads the word for which you need to find the antonym.
 
     Returns:
-        str: The target word
+        str: The user word
     '''
     word = input('Введите слово для поиска антонима: ')
     
@@ -80,3 +80,4 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
+
