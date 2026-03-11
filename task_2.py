@@ -23,18 +23,20 @@ def create_dict(n: int) -> dict:
     '''
     dictionary = {}
 
-    print('Введите пары слов:')
+    print('Введите пары слов словаря:')
 
     for _ in range(n):
-        russian, english = input().split()
-        dictionary[russian] = english
+        line = input().split()
+        rus, eng = line[0], line[1]
+
+        dictionary[rus] = eng
     
     return dictionary
 
 
 def get_phrase() -> str:
     '''
-    The function reads the phrase in Russian entered by the user
+    The function reads the phrase entered by the user
 
     Returns:
         str: The user phrase
@@ -44,7 +46,7 @@ def get_phrase() -> str:
     return phrase
 
 
-def translate_phrase(phrase: str, dictionary: dict) -> str:
+def translate_rus_eng(phrase: str, dictionary: dict) -> str:
     '''
     The function translates a phrase from Russian 
     into English using a dictionary.
@@ -78,7 +80,7 @@ def main() -> None:
 
     phrase = get_phrase()
 
-    translated_phrase = translate_phrase(phrase, dictionary)
+    translated_phrase = translate_rus_eng(phrase, dictionary)
     
     print(translated_phrase)
 
