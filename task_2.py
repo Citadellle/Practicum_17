@@ -10,7 +10,7 @@ def get_dict_size() -> int:
     return n
 
 
-def create_dict(n: int) -> dict:
+def rus_eng_dict(n: int) -> dict:
     '''
     The function creates a Russian-English dictionary from user input.
 
@@ -76,7 +76,7 @@ def translate_rus_eng(phrase: str, dictionary: dict) -> str:
 def main() -> None:
     n = get_dict_size()
 
-    dictionary = create_dict(n)
+    dictionary = rus_eng_dict(n)
 
     phrase = get_phrase()
 
