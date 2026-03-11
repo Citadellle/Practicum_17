@@ -10,9 +10,9 @@ def get_number_of_relations() -> int:
     return n
 
 
-def build_tree(n: int) -> dict:
+def genealogical_tree(n: int) -> dict:
     '''
-    The function builds a family tree from parent-child relationships.
+    The function builds a genealogical tree from parent-child relationships.
 
     Args:
         n (int): Number of relationships
@@ -25,14 +25,14 @@ def build_tree(n: int) -> dict:
     print('Введите пары родитель - потомок:')
 
     for _ in range(n):
-        parent, child = input().split()
+        line = input().split()
+        parent, child = line[0], line[1]
         
         if parent in tree:
             tree[parent].append(child)
         else:
             tree[parent] = [child]
         
-        # Adding children to the tree
         if child not in tree:
             tree[child] = []
     
@@ -67,19 +67,19 @@ def count_descendants(person: str, tree: dict) -> int:
     if person not in tree:
         return 0
     
-    total = 0
+    num = 0
     # We recursively go through each child, adding him and 
     # the number of his children.
     for child in tree[person]:
-        total += (1 + count_descendants(child, tree))
+        num += (1 + count_descendants(child, tree))
     
-    return total
+    return num
 
 
 def main() -> None:
     n = get_number_of_relations()
 
-    family_tree = build_tree(n)
+    family_tree = genealogical_tree(n)
 
     target_person = get_target_person()
 
