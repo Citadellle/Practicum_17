@@ -56,7 +56,7 @@ def build_net(m: int) -> dict:
     return net
 
 
-def get_target_road() -> tuple:
+def get_target_towns() -> tuple:
     '''
     The function reads the start and end towns to find the shortest path between them.
 
@@ -86,34 +86,27 @@ def find_short_distance(start_town: str, end_town: str, net: dict) -> int:
     '''
     # Create a dictionary: town - distance
     # Distances - distances from start_town to the key town
-    # Assign start_town value 0, 
-    # other values inf until distance to them is unknown
+    # Set start_town to 0, and set the other values to inf
+    # until the distance to them is unknown.
     distances = {town : float('inf') for town in net}
     distances[start_town] = 0
 
-    # unvisited towns yet
+    # towns is unvisited
     unvisited = set(net.keys())
 
     while unvisited:
         # Find the optimal town with minimum distance
-        current_town = min(unvisited, key=lambda town: distances[town])
+        next_town = min(unvisited, key= lambda town: distances[town])
 
-        # Exit the loop: if the optimal town is the destination
-        if current_town == end_town:
-            break
+        unvisited.remove(next_town)
 
-        unvisited.remove(current_town)
+        # Iterate tuples: (neighboring town, distance)
+        for town, distance in net[next_town].items():
+            new_distance = distances[next_town] + distance
+            distances[town] = min(new_distance,
+                                  distances[town])
 
-        # Iterate through tuples: (neighboring town, distance)
-        for town, distance in net[current_town].items():
-            if town in unvisited:
-                new_distance = distances[current_town] + distance
-                distances[town] = min(new_distance,
-                                      distances[town])
-    
-    end_town_dist = distances[end_town]
-
-    return end_town_dist
+    return distances[end_town]
 
 
 def main() -> None:
@@ -123,12 +116,11 @@ def main() -> None:
 
     net = build_net(m)
 
-    start_town, end_town = get_target_road()
+    start_town, end_town = get_target_towns()
     
     short_distance = find_short_distance(start_town, end_town, net)
 
     print(short_distance)
-
 
 
 if __name__ == '__main__':
