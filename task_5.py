@@ -1,126 +1,91 @@
-def get_number_towns() -> int:
+def get_number_of_relations() -> int:
     '''
-    The function reads the number of settlements.
+    The function reads the number of parent-child relationships.
 
     Returns:
-        int: Number of settlements
+        int: Number of relationships
     '''
-    n = int(input('Введите количество населенных пунктов: '))
-    
+    n = int(input('Введите количество родительских отношений: '))
+
     return n
 
 
-def get_number_roads() -> int:
+def genealogical_tree(n: int) -> dict:
     '''
-    The function reads the number of roads.
-
-    Returns:
-        int: Number of roads
-    '''
-    m = int(input('Введите количество дорог: '))
-    
-    return m
-
-
-def build_net(m: int) -> dict:
-    '''
-    The function builds a net of settlements and the distances between them.
+    The function builds a genealogical tree from parent-child relationships.
 
     Args:
-        m (int): Number of roads
+        n (int): Number of relationships
 
     Returns:
-        dict: A dictionary of dictionaries. The keys of the main dictionary 
-        are cities, and the values are auxiliary dictionaries. The keys of 
-        the auxiliary dictionaries are cities, and the values are the distances 
-        from the city-key of the main dictionary to the city-key of the 
-        auxiliary dictionary.
+        dict: Dictionary with parent names as keys and list of children as values
     '''
-    net = {}
+    tree = {}
 
-    print('Введите параметры дорог между населенными пунктами'
-          'в формате: пункт_1 пункт_2 расстояние')
+    print('Введите пары родитель - потомок:')
 
-    for _ in range(m):
-        town_1, town_2, distance = input().split()
-        distance = int(distance)
-        
-        if town_1 not in net:
-            net[town_1] = {}
-        if town_2 not in net:
-            net[town_2] = {}
-        
-        net[town_1][town_2] = distance
-        net[town_2][town_1] = distance
-    
-    return net
+    for _ in range(n):
+        line = input().split()
+        parent, child = line[0], line[1]
+
+        if parent in tree:
+            tree[parent].append(child)
+        else:
+            tree[parent] = [child]
+
+        if child not in tree:
+            tree[child] = []
+
+    return tree
 
 
-def get_target_towns() -> tuple:
+def get_target_person() -> str:
     '''
-    The function reads the start and end towns to find the shortest path between them.
+    The function reads the name for which the count descendants to be found.
 
     Returns:
-        tuple: (start_town, end_town)
+        str: The target person name
     '''
-    start_town, end_town = input('Введите начальный и конечный '
-                                 'населенные пункты: ').split()
-    
-    return start_town, end_town
+    name = input('Введите имя для поиска кол-ва потомков: ')
+
+    return name
 
 
-def find_short_distance(start_town: str, end_town: str, net: dict) -> int:
+def count_descendants(person: str, tree: dict) -> int:
     '''
-    The function finds the shortest distance between two towns
-    using Dijkstra's algorithm.
+    Recursive function that counts all descendants:
+        (children, grandchildren, ...)
+    for a entered person in the family tree.
 
     Args:
-        start_town (str): Name of the starting town
-        end_town (str): Name of the destination town
-        net (dict): Graph representing towns and distances between them.
-                   Format: {town1: {town2: distance, town3: distance, ...},
-                           town2: {...}, ...}
+        person (str): The name of the entered person
+        tree (dict): Family tree dictionary
 
     Returns:
-        int: Shortest distance from start_town to end_town
+        int: Total number of descendants
     '''
-    # Create a dictionary: town - distance
-    # Distances - distances from start_town to the key town
-    # Set start_town to 0, and set the other values to inf
-    # until the distance to them is unknown.
-    distances = {town : float('inf') for town in net}
-    distances[start_town] = 0
+    if person not in tree:
+        return 0
 
-    # towns is unvisited
-    unvisited = set(net.keys())
+    num = 0
+    # We recursively go through each child, adding him and 
+    # the number of his children.
+    for child in tree[person]:
+        num += (1 + count_descendants(child, tree))
 
-    while unvisited:
-        # Find the optimal town with minimum distance
-        next_town = min(unvisited, key= lambda town: distances[town])
-
-        unvisited.remove(next_town)
-
-        # Iterate tuples: (neighboring town, distance)
-        for town, distance in net[next_town].items():
-            new_distance = distances[next_town] + distance
-            distances[town] = min(new_distance,
-                                  distances[town])
-
-    return distances[end_town]
+    return num
 
 
 def main() -> None:
-    n = get_number_towns()
+    n = get_number_of_relations()
 
-    m = get_number_roads()
+    family_tree = genealogical_tree(n)
 
-    net = build_net(m)
+    target_person = get_target_person()
 
-    start_town, end_town = get_target_towns()
-    
-    short_distance = find_short_distance(start_town, end_town, net)
+    result = count_descendants(target_person, family_tree)
 
-    print(short_distance)
+    print(result)
 
 
 if __name__ == '__main__':
